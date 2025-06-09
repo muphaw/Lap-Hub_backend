@@ -21,30 +21,33 @@ RUN a2enmod rewrite
 # Set Apache document root to Laravel's public folder
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
-# Override the default Apache site config to use new document root
+# Override the default Apache site config
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Set working directory inside the container to /var/www/html
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel project files from the 'laravel' directory on host to container
+# Copy project files into the container
 COPY . .
 
-# Install PHP dependencies with Composer (no dev for production)
-RUN composer install --no-interaction --optimize-autoloader --no-dev --no-scripts
+# Ensure .env file exists (important for Laravel install)
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
-# Run Laravel post-install scripts (optional, if you want them)
-RUN composer run-script post-install-cmd
+# Install PHP dependencies with Composer (includes script hooks)
+RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Fix permissions for storage and cache so Apache can write to them
+# Generate Laravel app key
+RUN php artisan key:generate
+
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose HTTP port 80
+# Expose port
 EXPOSE 80
 
-# Start Apache in foreground mode
+# Start Apache
 CMD ["apache2-foreground"]
