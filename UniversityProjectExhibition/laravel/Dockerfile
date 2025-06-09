@@ -47,7 +47,7 @@ COPY . .
 #RUN composer install --no-interaction --optimize-autoloader --no-dev ----------if i get error, remove the # 1
 
 # Generate Laravel app key
-RUN php artisan key:generate
+#RUN php artisan key:generate
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
