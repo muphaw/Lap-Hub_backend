@@ -33,8 +33,8 @@ WORKDIR /var/www/html
 # Copy project files into the container
 COPY . .
 
-# Ensure .env file exists (important for Laravel install)
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Ensure .env file exists (important for Laravel install) --now close this
+#RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Install PHP dependencies with Composer (includes script hooks)
 RUN composer install --no-interaction --optimize-autoloader --no-dev
