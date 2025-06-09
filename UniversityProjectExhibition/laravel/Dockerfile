@@ -12,49 +12,43 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install required PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql
 
-# Enable Apache mod_rewrite for Laravel pretty URLs
+# Enable Apache mod_rewrite for Laravel's routing
 RUN a2enmod rewrite
 
 # Set Apache document root to Laravel's public folder
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
-# Override the default Apache site config
+# Use custom Apache config
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
 # Install Composer globally
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Set working directory
+# Set working directory inside container
 WORKDIR /var/www/html
 
-
-#if error, remove this two lines 
+# Copy composer files first to leverage Docker caching
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader 
 
+# Install PHP dependencies without running post-install scripts
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-
-# Copy project files into the container
+# Copy the rest of the Laravel application
 COPY . .
 
-# Ensure .env file exists (important for Laravel install) --now close this
-#RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Manually run the post-install script after artisan exists
+RUN php artisan package:discover --ansi || true
 
-# Install PHP dependencies with Composer (includes script hooks)
-#RUN composer install --no-interaction --optimize-autoloader --no-dev ----------if i get error, remove the # 1
-
-# Generate Laravel app key
-#RUN php artisan key:generate
-
-# Set proper permissions
+# Permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port
+# Expose Apache HTTP port
 EXPOSE 80
 
-# Start Apache
+# Start Apache in the foreground
 CMD ["apache2-foreground"]
