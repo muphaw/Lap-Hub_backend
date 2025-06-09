@@ -31,7 +31,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 
-#if error, remove this two lines # 1
+#if error, remove this two lines 
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader 
 
