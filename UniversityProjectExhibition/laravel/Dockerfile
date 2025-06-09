@@ -30,6 +30,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Set working directory
 WORKDIR /var/www/html
 
+
+#if error, remove this two lines # 1
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader 
+
+
+
 # Copy project files into the container
 COPY . .
 
@@ -37,7 +44,7 @@ COPY . .
 #RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Install PHP dependencies with Composer (includes script hooks)
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+#RUN composer install --no-interaction --optimize-autoloader --no-dev ----------if i get error, remove the # 1
 
 # Generate Laravel app key
 RUN php artisan key:generate
