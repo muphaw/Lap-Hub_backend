@@ -21,7 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'student_id',
+        'password_hash',
     ];
+
+    //do mass assignment for user_id (important for login)
+    protected $primaryKey = 'user_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,4 +48,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function students()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'user_id');
+    }
+
+    //to off laravel atomatic timestamps 
+    public $timestamps = false;
 }
