@@ -5,24 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Model
+class Registrations extends Model
 {
-    protected $primaryKey = 'user_id';
-
+    use HasFactory;
     protected $fillable = [
-
         'student_id',
-        'password_hash',
-        'created_at'
+        'email',
+        'purpose',
+        'created_at',
     ];
 
     public function student()
     {
         return $this->belongsTo(Student::class);
-    }
-
-    public function projects()
-    {
-        return $this->hasMany(Project::class);
     }
 }
