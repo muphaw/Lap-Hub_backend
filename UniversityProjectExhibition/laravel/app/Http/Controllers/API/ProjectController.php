@@ -1,43 +1,44 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Project;
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
-use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Request;
+use App\Models\Project;
 
 class ProjectController extends Controller
 {
-    public function index()
-    {
-        return ProjectResource::collection(Project::all());
+    public function index() {
+        return Project::all();
     }
 
-    public function store(StoreProjectRequest $request)
-    {
-        $project = Project::create($request->validated());
-        return new ProjectResource($project);
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'project_id' => 'required|string|unique:projects',
+            'user_id' => 'required|string|exists:users,user_id',
+            'project_name' => 'required|string',
+            'project_detail' => 'nullable|string',
+            'project_date' => 'required|date',
+            'project_link' => 'nullable|url',
+            'project_image' => 'nullable|string',
+            'collaborators' => 'nullable|string',
+            'popularity' => 'nullable|integer'
+        ]);
+        return Project::create($validated);
     }
 
-    public function show($id)
-    {
+    public function show($id) {
+        return Project::findOrFail($id);
+    }
+
+    public function update(Request $request, $id) {
         $project = Project::findOrFail($id);
-        return new ProjectResource($project);
+        $project->update($request->all());
+        return $project;
     }
 
-    public function update(UpdateProjectRequest $request, $id)
-    {
-        $project = Project::findOrFail($id);
-        $project->update($request->validated());
-        return new ProjectResource($project);
-    }
-
-    public function destroy($id)
-    {
-        $project = Project::findOrFail($id);
-        $project->delete();
-        return response()->json(['message' => 'Deleted successfully']);
+    public function destroy($id) {
+        Project::destroy($id);
+        return response()->json(['message' => 'Deleted']);
     }
 }

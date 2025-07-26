@@ -14,13 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('registrations', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('student_id');
+            $table->id();
+            $table->unsignedBigInteger('student_id');
             $table->string('email');
             $table->string('purpose');
             $table->timestamp('created_at')->useCurrent();
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
         });
+
     }
 
     /**

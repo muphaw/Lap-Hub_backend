@@ -1,15 +1,11 @@
 <?php
-
-use App\Http\Controllers\API\UserController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ProjectController;
 use App\Http\Controllers\API\RegistrationController;
 
-Route::resource('users', UserController::class);
-Route::resource('students', StudentController::class);
-Route::resource('projects', ProjectController::class);
-Route::resource('registrations', RegistrationController::class);
-
-
-
-
+Route::apiResource('students', StudentController::class);
+Route::apiResource('users', UserController::class);
+Route::apiResource('projects', ProjectController::class);
+Route::apiResource('registrations', RegistrationController::class);

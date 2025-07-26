@@ -1,37 +1,40 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
-use App\Models\Student;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreStudentRequest;
-use App\Http\Requests\UpdateStudentRequest;
-use App\Http\Resources\StudentResource;
+use Illuminate\Http\Request;
+use App\Models\Student;
 
 class StudentController extends Controller
 {
-    public function index() { return StudentResource::collection(Student::all()); }
-
-    public function store(StoreStudentRequest $request)
-    {
-        $student = Student::create($request->validated());
-        return new StudentResource($student);
+    public function index() {
+        return Student::all();
     }
 
-    public function show($id)
-    {
-        return new StudentResource(Student::findOrFail($id));
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'student_id' => 'required|string|unique:students',
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'major' => 'required|string',
+            'batch' => 'required|string',
+        ]);
+        return Student::create($validated);
     }
 
-    public function update(UpdateStudentRequest $request, $id)
-    {
+    public function show($id) {
+        return Student::findOrFail($id);
+    }
+
+    public function update(Request $request, $id) {
         $student = Student::findOrFail($id);
-        $student->update($request->validated());
-        return new StudentResource($student);
+        $student->update($request->all());
+        return $student;
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id) {
         Student::destroy($id);
-        return response()->json(['message' => 'Student deleted']);
+        return response()->json(['message' => 'Deleted']);
     }
 }
