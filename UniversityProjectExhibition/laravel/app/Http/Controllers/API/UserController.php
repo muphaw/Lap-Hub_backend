@@ -18,7 +18,10 @@ class UserController extends Controller
             'student_id' => 'required|string|exists:students,student_id',
             'password_hash' => 'required|string',
         ]);
-        return User::create($validated);
+
+        $validated['password_hash'] = bcrypt($validated['password_hash']);
+
+        return response()->json(User::create($validated), 201);
     }
 
     public function show($id) {
@@ -27,12 +30,22 @@ class UserController extends Controller
 
     public function update(Request $request, $id) {
         $user = User::findOrFail($id);
-        $user->update($request->all());
+
+        $validated = $request->validate([
+            'password_hash' => 'sometimes|string',
+            'student_id' => 'sometimes|string|exists:students,student_id',
+        ]);
+
+        if (isset($validated['password_hash'])) {
+            $validated['password_hash'] = bcrypt($validated['password_hash']);
+        }
+
+        $user->update($validated);
         return $user;
     }
 
     public function destroy($id) {
         User::destroy($id);
-        return response()->json(['message' => 'Deleted']);
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 }

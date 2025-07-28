@@ -19,15 +19,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('major');
             $table->string('batch');
+            $table->string('photo')->nullable();
         });
 
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('students');

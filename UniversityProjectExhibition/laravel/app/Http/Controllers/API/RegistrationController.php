@@ -18,7 +18,8 @@ class RegistrationController extends Controller
             'email' => 'required|email',
             'purpose' => 'required|string'
         ]);
-        return Registration::create($validated);
+
+        return response()->json(Registration::create($validated), 201);
     }
 
     public function show($id) {
@@ -27,12 +28,19 @@ class RegistrationController extends Controller
 
     public function update(Request $request, $id) {
         $registration = Registration::findOrFail($id);
-        $registration->update($request->all());
-        return $registration;
+
+        $validated = $request->validate([
+            'student_id' => 'sometimes|string|exists:students,student_id',
+            'email' => 'sometimes|email',
+            'purpose' => 'sometimes|string'
+        ]);
+
+        $registration->update($validated);
+        return response()->json($registration, 200);
     }
 
     public function destroy($id) {
         Registration::destroy($id);
-        return response()->json(['message' => 'Deleted']);
+        return response()->json(['message' => 'Registration deleted successfully'], 200);
     }
 }

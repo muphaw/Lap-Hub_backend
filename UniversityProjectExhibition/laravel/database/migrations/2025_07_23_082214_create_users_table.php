@@ -14,11 +14,11 @@ return new class extends Migration
    public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id');
+            $table->id();
             $table->unsignedBigInteger('student_id');
             $table->string('password_hash');
-            $table->timestamps();
-
+            $table->string('photo')->nullable();
+            $table->timestamp('created_at')->useCurrent();
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
         });
     }

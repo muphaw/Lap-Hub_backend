@@ -24,7 +24,7 @@ class ProjectController extends Controller
             'collaborators' => 'nullable|string',
             'popularity' => 'nullable|integer'
         ]);
-        return Project::create($validated);
+        return response()->json(Project::create($validated), 201);
     }
 
     public function show($id) {
@@ -33,6 +33,18 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id) {
         $project = Project::findOrFail($id);
+        $validated = $request->validate([
+            'project_id' => 'required|string|unique:projects',
+            'user_id' => 'required|string|exists:users,user_id',
+            'project_name' => 'required|string',
+            'project_detail' => 'nullable|string',
+            'project_date' => 'required|date',
+            'project_link' => 'nullable|url',
+            'project_image' => 'nullable|string',
+            'collaborators' => 'nullable|string',
+            'popularity' => 'nullable|integer'
+        ]);
+
         $project->update($request->all());
         return $project;
     }
