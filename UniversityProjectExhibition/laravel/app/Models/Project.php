@@ -19,6 +19,7 @@ class Project extends Model
         'project_image',
         'collaborators',
         'popularity',
+        'liked',
     ];
     
     use HasFactory;

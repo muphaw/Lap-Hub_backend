@@ -17,10 +17,10 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|required',
-            'email' => 'sometimes|required|email|unique:students,email,' . $student->id,
+            'email' => 'sometimes|required|email|unique:students',
             'major' => 'sometimes|required',
             'batch' => 'sometimes|required',
-            'image' => 'nullable|image'
+            'image' => 'nullable'
         ]);
 
         if ($request->hasFile('image')) {

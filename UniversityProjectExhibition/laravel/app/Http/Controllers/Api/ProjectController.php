@@ -31,8 +31,10 @@ class ProjectController extends Controller
             'project_detail' => 'nullable|string',
             'project_date' => 'nullable|date',
             'project_link' => 'nullable|string',
-            'project_image' => 'nullable|image|max:2048',
+            'project_image' => 'nullable',
             'collaborators' => 'nullable|string',
+            'liked' => 'nullable|boolean',
+            'popularity' => 'nullable|integer'
         ]);
 
         $data = $request->all();
