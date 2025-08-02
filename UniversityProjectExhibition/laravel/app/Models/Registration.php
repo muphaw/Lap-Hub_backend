@@ -2,21 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Registrations extends Model
+class Registration extends Model
 {
-    use HasFactory;
+    protected $primaryKey = 'reg_id';
+    public $timestamps = false;
+
     protected $fillable = [
         'student_id',
         'email',
         'purpose',
+        'otp_code',
+        'expires_at',
+        'attempts',
+        'is_used',
         'created_at',
     ];
 
-    public function student()
+    use HasFactory;
+
+    public function students()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }

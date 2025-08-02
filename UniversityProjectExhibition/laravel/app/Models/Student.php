@@ -2,34 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
     use HasFactory;
-
-    protected $primaryKey = 'student_id';
-    public $incrementing = false; 
-    protected $keyType = 'string'; 
-    public $timestamps = false;
-
-    protected $fillable = [
-        'student_id',
-        'name',
-        'email',
-        'major',
-        'batch',
-        'photo'
-    ];
-
-    public function user()
+    public function users()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class,'student_id');
     }
 
     public function registrations()
     {
-        return $this->hasMany(Registration::class);
+        return $this->hasOne(Registration::class,'student_id');
     }
+
+    protected $fillable = ['name', 'email','image', 'major', 'batch'];
+    protected $primaryKey = 'student_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
 }
