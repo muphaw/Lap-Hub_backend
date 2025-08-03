@@ -54,4 +54,4 @@ EXPOSE 80
 CMD ["apache2-foreground"]
 
 #for migrations
-CMD php artisan migrate --force && apache2-foreground
+# CMD php artisan migrate --force && apache2-foreground
