@@ -29,4 +29,4 @@ Homestead.json
 .phpactor.json
 auth.json
 mysql_data/
-
+docker/mysql/data/
