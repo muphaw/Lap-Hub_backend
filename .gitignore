@@ -26,7 +26,11 @@ Homestead.json
 /storage/pail
 .env.backup
 .env.production
+.env.local
+.env.*.local
 .phpactor.json
 auth.json
+dist/
+*.local
 mysql_data/
 docker/mysql/data/
