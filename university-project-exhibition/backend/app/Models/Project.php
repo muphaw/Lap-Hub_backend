@@ -18,7 +18,6 @@ class Project extends Model
         'project_date',
         'project_link',
         'project_image',
-        'collaborators',
         'popularity',
         'liked',
     ];

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('project_date')->nullable();
             $table->string('project_link')->nullable();
             $table->string('project_image')->nullable();
-            $table->string('collaborators')->nullable();
             $table->integer('popularity')->default(0);
             $table->boolean('liked')->default(false);
             $table->timestamp('created_at')->useCurrent();

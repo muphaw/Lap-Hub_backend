@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'user_id');
     }
 
+    public function collaborators()
+    {
+        return $this->hasMany(Collaborator::class);
+    }
+
     //to off laravel atomatic timestamps 
     public $timestamps = false;
 }

@@ -1,8 +1,9 @@
 <?php
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\StudentController;
-use App\Http\Controllers\Api\ProjectController;
-use App\Http\Controllers\Api\RegistrationController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\ProjectController;
+use App\Http\Controllers\API\RegistrationController;
+use App\Http\Controllers\API\CollaboratorController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,5 +43,9 @@ Route::apiResource('projects', ProjectController::class);
 
 //Api route for registrations
 Route::apiResource('registrations', RegistrationController::class);
+
+//Api route for collaborators
+Route::apiResource('collaborators', CollaboratorController::class);
+
 
 
